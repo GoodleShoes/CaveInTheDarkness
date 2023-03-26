@@ -1,0 +1,4 @@
+# requirements.txt
+# https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format
+tcod>=11.15
+numpy>=1.18
