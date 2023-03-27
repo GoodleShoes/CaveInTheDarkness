@@ -70,6 +70,10 @@ dagger = Item(
 
 sword = Item(char="/", color=(0, 191, 255), name="Sword", equippable=equippable.Sword())
 
+axe = Item(char="/", color=(0, 191, 255), name="Axe", equippable=equippable.Axe())
+
+bow = Item(char="/", color=(0, 291, 155), name="Bow", equippable=equippable.Bow())
+
 leather_armor = Item(
     char="[",
     color=(139, 69, 19),
@@ -79,4 +83,11 @@ leather_armor = Item(
 
 chain_mail = Item(
     char="[", color=(139, 69, 19), name="Chain Mail", equippable=equippable.ChainMail()
+)
+
+arrow = Item(
+    char="-",
+    color=(70, 112, 174),
+    name="Arrow",
+    consumable=consumable.ArrowDamageConsumable(damage=10, maximum_range=5),
 )

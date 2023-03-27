@@ -27,6 +27,7 @@ class Action:
         """
         raise NotImplementedError()
 
+
 class PickupAction(Action):
     """Pickup an item and add it to the inventory, if there is room for it."""
 
@@ -52,6 +53,7 @@ class PickupAction(Action):
 
         raise exceptions.Impossible("There is nothing here to pick up.")
 
+
 class ItemAction(Action):
     def __init__(
         self, entity: Actor, item: Item, target_xy: Optional[Tuple[int, int]] = None
@@ -72,12 +74,14 @@ class ItemAction(Action):
         if self.item.consumable:
             self.item.consumable.activate(self)
 
+
 class DropItem(ItemAction):
     def perform(self) -> None:
         if self.entity.equipment.item_is_equipped(self.item):
             self.entity.equipment.toggle_equip(self.item)
 
         self.entity.inventory.drop(self.item)
+
 
 class EquipAction(Action):
     def __init__(self, entity: Actor, item: Item):
@@ -87,6 +91,7 @@ class EquipAction(Action):
 
     def perform(self) -> None:
         self.entity.equipment.toggle_equip(self.item)
+
 
 class WaitAction(Action):
     def perform(self) -> None:

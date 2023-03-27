@@ -60,9 +60,10 @@ MOVE_KEYS = {
 }
 
 WAIT_KEYS = {
-    tcod.event.K_COLON,
+    tcod.event.K_SEMICOLON,
     tcod.event.K_KP_5,
     tcod.event.K_CLEAR,
+    tcod.event.K_s,
 }
 
 CONFIRM_KEYS = {

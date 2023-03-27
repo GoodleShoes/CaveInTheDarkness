@@ -152,3 +152,47 @@ class LightningDamageConsumable(Consumable):
             self.consume()
         else:
             raise Impossible("No enemy is close enough to strike.")
+
+
+class ArrowDamageConsumable(Consumable):
+
+    def __init__(self, damage: int, maximum_range: int):
+        self.damage = damage
+        self.maximum_range = maximum_range
+
+    def get_action(self, consumer: Actor) -> SingleRangedAttackHandler:
+
+        # if consumer.fighter.engine.player.equipment.weapon.name != "Bow":
+        #     self.engine.message_log.add_message(
+        #         "You need to equip a bow to shoot an arrow.", color.needs_target
+        #     )
+
+        self.engine.message_log.add_message(
+            "Select a target location.", color.needs_target
+        )
+        return SingleRangedAttackHandler(
+            self.engine,
+            callback=lambda xy: actions.ItemAction(consumer, self.parent, xy),
+        )
+
+    def activate(self, action: actions.ItemAction) -> None:
+        closest_distance = self.maximum_range + 1.0
+        consumer = action.entity
+        target = action.target_actor
+
+        for actor in self.engine.game_map.actors:
+            if actor is not consumer and self.parent.gamemap.visible[actor.x, actor.y]:
+                distance = consumer.distance(actor.x, actor.y)
+
+                if distance < closest_distance:
+                    target = actor
+                    closest_distance = distance
+
+        if target:
+            self.engine.message_log.add_message(
+                f"An arrow strikes the {target.name} for {self.damage} damage!"
+            )
+            target.fighter.take_damage(self.damage)
+            self.consume()
+        else:
+            raise Impossible("No enemy is close enough to strike.")

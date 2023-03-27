@@ -34,6 +34,16 @@ class Sword(Equippable):
         super().__init__(equipment_type=EquipmentType.WEAPON, power_bonus=4)
 
 
+class Axe(Equippable):
+    def __init__(self) -> None:
+        super().__init__(equipment_type=EquipmentType.WEAPON, power_bonus=4)
+
+
+class Bow(Equippable):
+    def __init__(self) -> None:
+        super().__init__(equipment_type=EquipmentType.WEAPON, power_bonus=3)
+
+
 class LeatherArmor(Equippable):
     def __init__(self) -> None:
         super().__init__(equipment_type=EquipmentType.ARMOR, defense_bonus=1)
@@ -42,3 +52,4 @@ class LeatherArmor(Equippable):
 class ChainMail(Equippable):
     def __init__(self) -> None:
         super().__init__(equipment_type=EquipmentType.ARMOR, defense_bonus=3)
+
