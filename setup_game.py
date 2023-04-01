@@ -36,7 +36,7 @@ def new_game(new_character_name, new_character_background) -> Engine:
     engine = Engine(player=player)
 
     engine.player.name = new_character_name
-    engine.player.player_background = new_character_background
+    # engine.player.player_background = new_character_background
 
     engine.game_world = GameWorld(
         engine=engine,
@@ -54,25 +54,48 @@ def new_game(new_character_name, new_character_background) -> Engine:
         "Hello and welcome, adventurer, to yet another dungeon!", color.welcome_text
     )
 
-    # player_class = components.player_class.
-
-    # dagger = copy.deepcopy(entity_factories.dagger)
     bow = copy.deepcopy(entity_factories.bow)
+    dagger = copy.deepcopy(entity_factories.dagger)
+    sword = copy.deepcopy(entity_factories.sword)
     arrow = copy.deepcopy(entity_factories.arrow)
+    robe = copy.deepcopy(entity_factories.robe)
     leather_armor = copy.deepcopy(entity_factories.leather_armor)
+    chain_mail = copy.deepcopy(entity_factories.chain_mail)
 
-    bow.parent = player.inventory
-    # dagger.parent = player.inventory
-    leather_armor.parent = player.inventory
+    if new_character_background == "Barbarian":
+        sword.parent = player.inventory
+        chain_mail.parent = player.inventory
+        player.inventory.items.append(sword)
+        player.inventory.items.append(chain_mail)
 
-    player.inventory.items.append(bow)
-    player.inventory.items.append(arrow)
-    player.equipment.toggle_equip(bow, add_message=False)
+    elif new_character_background == "Ranger":
 
-    player.inventory.items.append(leather_armor)
-    player.equipment.toggle_equip(leather_armor, add_message=False)
+        bow.parent = player.inventory
+        dagger.parent = player.inventory
+        leather_armor.parent = player.inventory
 
-    return engine
+        player.inventory.items.append(bow)
+        player.inventory.items.append(arrow)
+        player.equipment.toggle_equip(bow, add_message=False)
+
+        player.inventory.items.append(leather_armor)
+        player.equipment.toggle_equip(leather_armor, add_message=False)
+
+    elif new_character_background == "Wizard":
+
+        dagger.parent = player.inventory
+        robe.parent = player.inventory
+
+        player.inventory.items.append(dagger)
+        player.equipment.toggle_equip(dagger, add_message=False)
+
+        player.inventory.items.append(robe)
+        player.equipment.toggle_equip(robe, add_message=False)
+
+
+
+
+        return engine
 
 
 def new_game_character_name_menu(self) -> Optional[str, Engine]:
@@ -170,7 +193,7 @@ def new_player_background_menu(self) -> Optional[str, Engine]:
 
     self.console.print(
         self.console.width // 2,
-        0,
+        self.console.height // 2,
         "Please select your Background",
         fg=color.menu_title,
         alignment=tcod.CENTER,
@@ -179,7 +202,7 @@ def new_player_background_menu(self) -> Optional[str, Engine]:
     for i, player_background in enumerate(player_backgrounds):
         self.console.print(
             self.console.width // 2,
-            i + 2,
+            self.console.height // 2 + i + 2,
             f"[{i + 1}] {player_background}",
             fg=color.menu_text,
             alignment=tcod.CENTER,
