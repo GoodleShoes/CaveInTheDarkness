@@ -16,12 +16,13 @@ from engine import Engine
 import entity_factories
 from game_map import GameWorld
 import input_handlers
+from components.player_background import PlayerBackground
 
 # Load the background image and remove the alpha channel.
 background_image = tcod.image.load("menu_background2.png")[:, :, :3]
 
 
-def new_game(new_character_name) -> Engine:
+def new_game(new_character_name, new_character_background) -> Engine:
     """Return a brand new game session as an Engine instance."""
     map_width = 80
     map_height = 43
@@ -35,6 +36,7 @@ def new_game(new_character_name) -> Engine:
     engine = Engine(player=player)
 
     engine.player.name = new_character_name
+    engine.player.player_background = new_character_background
 
     engine.game_world = GameWorld(
         engine=engine,
@@ -51,6 +53,8 @@ def new_game(new_character_name) -> Engine:
     engine.message_log.add_message(
         "Hello and welcome, adventurer, to yet another dungeon!", color.welcome_text
     )
+
+    # player_class = components.player_class.
 
     # dagger = copy.deepcopy(entity_factories.dagger)
     bow = copy.deepcopy(entity_factories.bow)
@@ -155,6 +159,45 @@ def new_game_character_name_menu(self) -> Optional[str, Engine]:
             alignment=tcod.CENTER,
         )
         self.context.present(self.console)
+
+
+def new_player_background_menu(self) -> Optional[str, Engine]:
+    """Show a list of player backgrounds and prompt the user to choose one to load."""
+
+    player_backgrounds = [background.name for background in PlayerBackground]
+
+    self.console.clear()
+
+    self.console.print(
+        self.console.width // 2,
+        0,
+        "Please select your Background",
+        fg=color.menu_title,
+        alignment=tcod.CENTER,
+    )
+
+    for i, player_background in enumerate(player_backgrounds):
+        self.console.print(
+            self.console.width // 2,
+            i + 2,
+            f"[{i + 1}] {player_background}",
+            fg=color.menu_text,
+            alignment=tcod.CENTER,
+        )
+
+    self.context.present(self.console)
+
+    while True:
+        key = tcod.console_wait_for_keypress(flush=True)
+        if key.vk == tcod.KEY_ESCAPE:
+            return None
+
+        try:
+            choice = int(chr(key.c))
+            if choice <= len(player_backgrounds):
+                return player_backgrounds[choice - 1]
+        except (ValueError, KeyError, IndexError):
+            pass
 
 
 def load_game(filename: str) -> Engine:
@@ -270,10 +313,11 @@ class MainMenu(input_handlers.BaseEventHandler):
                 return input_handlers.PopupMessage(self, f"Failed to load save:\n{exc}")
         elif event.sym == tcod.event.K_n:
             new_character_name = new_game_character_name_menu(self)
+            new_player_background = new_player_background_menu(self)
             if new_character_name is None:
                 return None  # User cancelled
             try:
-                return input_handlers.MainGameEventHandler(new_game(new_character_name))
+                return input_handlers.MainGameEventHandler(new_game(new_character_name, new_player_background))
             except Exception as exc:
                 traceback.print_exc()  # Print to stderr.
                 return input_handlers.PopupMessage(self, f"Failed to start new game:\n{exc}")

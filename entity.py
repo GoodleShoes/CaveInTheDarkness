@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from components.fighter import Fighter
     from components.inventory import Inventory
     from components.level import Level
+    from components.player_background import PlayerBackground
     from game_map import GameMap
 
 T = TypeVar("T", bound="Entity")
@@ -123,6 +124,8 @@ class Actor(Entity):
 
         self.level = level
         self.level.parent = self
+
+
 
     @property
     def is_alive(self) -> bool:

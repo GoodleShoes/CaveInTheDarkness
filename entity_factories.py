@@ -4,6 +4,8 @@ from components.equipment import Equipment
 from components.fighter import Fighter
 from components.inventory import Inventory
 from components.level import Level
+from components.player_background import PlayerBackground
+
 from entity import Actor, Item
 
 
@@ -64,15 +66,20 @@ lightning_scroll = Item(
     consumable=consumable.LightningDamageConsumable(damage=20, maximum_range=5),
 )
 
-dagger = Item(
-    char="/", color=(0, 191, 255), name="Dagger", equippable=equippable.Dagger()
-)
+dagger = Item(char="/", color=(0, 191, 255), name="Dagger", equippable=equippable.Dagger())
 
 sword = Item(char="/", color=(0, 191, 255), name="Sword", equippable=equippable.Sword())
 
 axe = Item(char="/", color=(0, 191, 255), name="Axe", equippable=equippable.Axe())
 
 bow = Item(char="/", color=(0, 291, 155), name="Bow", equippable=equippable.Bow())
+
+robe = Item(
+    char="[",
+    color=(139, 69, 19),
+    name="Robe",
+    equippable=equippable.LeatherArmor(),
+)
 
 leather_armor = Item(
     char="[",
